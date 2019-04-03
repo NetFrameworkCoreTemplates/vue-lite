@@ -4,9 +4,11 @@
 
 [![](https://raw.githubusercontent.com/ServiceStack/Assets/master/csharp-templates/vue-lite.png)](http://vue-lite.web-templates.io/)
 
-> Browse [source code](https://github.com/NetFrameworkCoreTemplates/vue-lite-corefx) and view live demo [vue-lite.web-templates.io](http://vue-lite.web-templates.io)) and install with [web new](https://docs.servicestack.net/web-new):
+> Browse [source code](https://github.com/NetFrameworkCoreTemplates/vue-lite-corefx) and view live demo [vue-lite.web-templates.io](http://vue-lite.web-templates.io)
 
-    $ dotnet tool install --global web
+Install with `web` .NET Core tool:
+
+    $ dotnet tool install -g web
 
     $ web new vue-lite-corefx ProjectName
 
