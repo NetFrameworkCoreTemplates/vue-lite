@@ -1,12 +1,18 @@
 {{* run in host project directory with `web run wwwroot/_bundle.ss` *}}
 
-{{ false | assignTo: debug }}
-{{ (debug ? '' : '.min') | assignTo: min }}
-{{ [`/css/bundle${min}.css`,`/js/lib.bundle${min}.js`,`/js/bundle${min}.js`] | map => fileDelete(it) | end }}
+{{ false | to => debug }}
+{{ (debug ? '' : '.min') | to => min }}
+{{ (debug ? '' : '[hash].min') | to => dist }}
+
+{{ [`/css/bundle${min}.css`,`/js/lib.bundle${min}.js`,`/js/bundle${min}.js`] 
+   | map => it.replace('[hash]','.*').filesFind()
+   | flatten
+   | map => it.VirtualPath.fileDelete() | end }}
 
 {{* Copy same bundle defintions from _layout.html as-is *}}
 
-{{ ['/assets/css/'] | bundleCss({ minify:!debug, cache:!debug, disk:!debug, out:`/css/bundle${min}.css` }) }}
+{{ ['!/assets/css/default.css','/assets/css/'] 
+    | bundleCss({ disk:!debug, out:`/css/lib.bundle${dist}.css` }) }}
 
 {{ [
     `/lib/vue/dist/vue${min}.js`,
@@ -15,10 +21,10 @@
     '/lib/vue-property-decorator/vue-property-decorator.umd.js',
     '/lib/@servicestack/client/servicestack-client.umd.js',
     '/lib/@servicestack/vue/servicestack-vue.umd.js',
-] | bundleJs({ minify:!debug, cache:!debug, disk:!debug, out:`/js/lib.bundle${min}.js` }) }}
+] | bundleJs({ disk:!debug, out:`/js/lib.bundle${dist}.js` }) }}
 
 {{ [
     'content:/src/components/',
     'content:/src/shared/',
     'content:/src/',
-] | bundleJs({ minify:!debug, cache:!debug, disk:!debug, out:`/js/bundle${min}.js`, iife:true }) }}
+] | bundleJs({ minify:!debug, cache:!debug, disk:!debug, out:`/js/bundle${dist}.js`, iife:true }) }}
